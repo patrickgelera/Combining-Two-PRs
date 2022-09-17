@@ -33,7 +33,11 @@ class GitCommand {
 		if (modified_files[path_file]) {
 			this.staging.push(modified_files[path_file]);
 			delete modified_files[path_file];
-		} else if (path_file == "*") {
+		} else if (path_file == ".") {
+				this.working_directory.new_changes = {};
+				return "Successfully added as index file/s.";
+		} 
+    else if (path_file == "*") {
 			let length = Object.keys(this.working_directory.new_changes).length;
 			let counter = 1;
 			Object.keys(this.working_directory.new_changes).forEach(function (
@@ -64,7 +68,6 @@ class GitCommand {
 		}
 		return "Nothing to commit.";
 	}
-
 	//Command: git push
 	push() {
 		if (this.local_repository.length > 0) {
