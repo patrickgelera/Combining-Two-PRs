@@ -29,15 +29,28 @@ class GitCommand {
 	//Command: git add <filename/file directory/wildcard>
 	add(path_file) {
 		let modified_files = this.working_directory.new_changes;
-
+		let file = {};
 		if (modified_files[path_file]) {
 			this.staging.push(modified_files[path_file]);
 			delete modified_files[path_file];
-		} else {
-			if (path_file == ".") {
+		} else if (path_file == ".") {
 				this.working_directory.new_changes = {};
 				return "Successfully added as index file/s.";
-			}
+		} 
+    else if (path_file == "*") {
+			let length = Object.keys(this.working_directory.new_changes).length;
+			let counter = 1;
+			Object.keys(this.working_directory.new_changes).forEach(function (
+				key
+			) {
+				if (counter == length) {
+					file[key] = modified_files[key];
+				}
+				counter++;
+			});
+			this.working_directory.new_changes = file;
+			return "Successfully added as index file/s.";
+		} else {
 			return `Failed to add ${path_file}! File is not modified or missing.`;
 		}
 		return "Successfully added as index file/s.";
@@ -55,7 +68,6 @@ class GitCommand {
 		}
 		return "Nothing to commit.";
 	}
-
 	//Command: git push
 	push() {
 		if (this.local_repository.length > 0) {
