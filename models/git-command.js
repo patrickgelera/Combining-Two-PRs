@@ -34,7 +34,7 @@ class GitCommand {
 			this.staging.push(modified_files[path_file]);
 			delete modified_files[path_file];
 		} else {
-			if (path_file == "*") {
+			if (path_file == ".") {
 				this.working_directory.new_changes = {};
 				return "Successfully added as index file/s.";
 			}
